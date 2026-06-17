@@ -1,0 +1,33 @@
+:root { --bg:#0f1720; --panel:#17212b; --accent:#2dd4bf; --muted:#8aa0b3; --line:#243240; --text:#e6eef5; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--text); }
+.topnav { display:flex; align-items:center; gap:14px; background:var(--panel); padding:12px 20px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.topnav .brand { font-weight:700; margin-right:10px; }
+.topnav small { color:var(--muted); font-weight:400; }
+.topnav a { color:var(--muted); text-decoration:none; padding:6px 10px; border-radius:6px; }
+.topnav a.on, .topnav a:hover { color:var(--text); background:#1f2d3a; }
+.topnav .logout { margin-left:auto; }
+.container { max-width:1100px; margin:24px auto; padding:0 20px; }
+h1 { font-size:22px; } h2 { font-size:18px; color:var(--accent); }
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:18px 0; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; }
+.card .num { font-size:28px; font-weight:700; color:var(--accent); }
+.card .label { color:var(--muted); font-size:13px; }
+table { width:100%; border-collapse:collapse; background:var(--panel); border-radius:10px; overflow:hidden; }
+th, td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); font-size:14px; }
+th { color:var(--muted); font-weight:600; }
+tr:hover td { background:#1c2935; }
+a { color:var(--accent); }
+.btn, button { background:var(--accent); color:#04201c; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; font-weight:600; }
+.btn.secondary, button.secondary { background:#2b3b49; color:var(--text); }
+.btn.danger, button.danger { background:#ef4444; color:#fff; }
+input, select { background:#0c141c; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:7px 9px; }
+form.inline { display:inline; }
+.badge { padding:2px 8px; border-radius:20px; font-size:12px; background:#2b3b49; }
+.badge.ok { background:#134e3a; color:#5eead4; } .badge.bad { background:#5b1d1d; color:#fca5a5; }
+.login-wrap { max-width:340px; margin:10vh auto; background:var(--panel); padding:28px; border-radius:12px; border:1px solid var(--line); }
+.login-wrap input { width:100%; margin:8px 0; }
+.flash { background:#134e3a; color:#5eead4; padding:10px 14px; border-radius:8px; margin:12px 0; }
+.error { color:#fca5a5; }
+pre { background:#0c141c; padding:14px; border-radius:8px; overflow:auto; border:1px solid var(--line); }
+.muted { color:var(--muted); }

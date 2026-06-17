@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Leaderboards')}"></head>
+<body>
+<nav th:replace="~{admin/fragments :: nav('leaderboards')}"></nav>
+<div class="container">
+    <h1>Leaderboards</h1>
+    <p th:if="${message}" class="flash" th:text="${message}"></p>
+
+    <form class="inline" th:action="@{/admin/leaderboards/rebuild}" method="post">
+        <input type="hidden" name="seasonId" th:value="${seasonId}"/>
+        <button type="submit">Rebuild Redis (this season)</button>
+    </form>
+    <form class="inline" th:action="@{/admin/leaderboards/rebuild}" method="post">
+        <button type="submit" class="secondary">Rebuild Redis (all seasons)</button>
+    </form>
+
+    <h2>National board</h2>
+    <div th:if="${nations == null}" class="muted">No active season selected.</div>
+    <table th:if="${nations != null}">
+        <thead><tr><th>Rank</th><th>Nation</th><th>Total score</th></tr></thead>
+        <tbody>
+        <tr th:each="e : ${nations.entries()}">
+            <td th:text="${e.rank()}"></td>
+            <td th:text="${e.nationCode()}"></td>
+            <td th:text="${e.score()}"></td>
+        </tr>
+        <tr th:if="${nations != null and nations.entries().isEmpty()}"><td colspan="3" class="muted">Empty.</td></tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

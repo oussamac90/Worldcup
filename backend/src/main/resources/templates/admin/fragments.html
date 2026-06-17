@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title}">GoalKeeper Dash Admin</title>
+    <link rel="stylesheet" th:href="@{/admin/css/admin.css}"/>
+</head>
+<body>
+<nav th:fragment="nav(active)" class="topnav">
+    <span class="brand">🧤 GoalKeeper Dash <small>Admin</small></span>
+    <a th:href="@{/admin}" th:classappend="${active=='dashboard'} ? 'on'">Dashboard</a>
+    <a th:href="@{/admin/users}" th:classappend="${active=='users'} ? 'on'">Users</a>
+    <a th:href="@{/admin/submissions}" th:classappend="${active=='submissions'} ? 'on'">Submissions</a>
+    <a th:href="@{/admin/seasons}" th:classappend="${active=='seasons'} ? 'on'">Seasons</a>
+    <a th:href="@{/admin/nations}" th:classappend="${active=='nations'} ? 'on'">Nations</a>
+    <a th:href="@{/admin/leaderboards}" th:classappend="${active=='leaderboards'} ? 'on'">Leaderboards</a>
+    <form th:action="@{/admin/logout}" method="post" class="logout">
+        <button type="submit">Logout</button>
+    </form>
+</nav>
+</body>
+</html>

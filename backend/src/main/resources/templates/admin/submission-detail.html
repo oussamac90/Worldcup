@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Submission')}"></head>
+<body>
+<nav th:replace="~{admin/fragments :: nav('submissions')}"></nav>
+<div class="container">
+    <p><a th:href="@{/admin/submissions}">&larr; Submissions</a></p>
+    <h1>Submission</h1>
+    <table>
+        <tbody>
+        <tr><th>ID</th><td th:text="${submission.id()}"></td></tr>
+        <tr><th>User</th><td><a th:href="@{/admin/users/{id}(id=${submission.userId()})}" th:text="${submission.userId()}"></a></td></tr>
+        <tr><th>Mode</th><td th:text="${submission.mode()}"></td></tr>
+        <tr><th>Score</th><td th:text="${submission.score()}"></td></tr>
+        <tr><th>Duration (ms)</th><td th:text="${submission.clientReportedDurationMs()}"></td></tr>
+        <tr><th>Validated</th><td th:text="${submission.validated()}"></td></tr>
+        <tr><th>Flagged</th><td th:text="${submission.flagged()}"></td></tr>
+        <tr><th>Manually invalidated</th><td th:text="${submission.manuallyInvalidated()}"></td></tr>
+        <tr><th>Counts toward boards</th><td th:text="${submission.countsTowardBoards()}"></td></tr>
+        <tr><th>Created</th><td th:text="${submission.createdAt()}"></td></tr>
+        </tbody>
+    </table>
+
+    <h2>Event summary (JSONB)</h2>
+    <pre th:text="${eventSummary}">{}</pre>
+
+    <form class="inline" th:action="@{/admin/submissions/{id}/invalidate(id=${submission.id()})}" method="post">
+        <button type="submit" class="danger">Invalidate</button>
+    </form>
+    <form class="inline" th:action="@{/admin/submissions/{id}/restore(id=${submission.id()})}" method="post">
+        <button type="submit" class="secondary">Restore</button>
+    </form>
+</div>
+</body>
+</html>
