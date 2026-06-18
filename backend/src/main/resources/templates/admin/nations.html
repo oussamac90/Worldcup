@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Nations')}"></head>
+<body>
+<nav th:replace="~{admin/fragments :: nav('nations')}"></nav>
+<div class="container">
+    <h1>Nations</h1>
+    <table>
+        <thead><tr><th>Code</th><th>Name / Colors</th><th>Active</th><th>Actions</th></tr></thead>
+        <tbody>
+        <tr th:each="n : ${nations}">
+            <td th:text="${n.code()}"></td>
+            <td>
+                <form class="inline" th:action="@{/admin/nations/{code}/update(code=${n.code()})}" method="post">
+                    <input type="text" name="name" th:value="${n.name()}"/>
+                    <input type="text" name="flagColors" th:value="${n.flagColors()}" size="18"/>
+                    <button type="submit" class="secondary">Save</button>
+                </form>
+            </td>
+            <td><span class="badge" th:classappend="${n.active()} ? 'ok' : 'bad'" th:text="${n.active()}"></span></td>
+            <td>
+                <form class="inline" th:action="@{/admin/nations/{code}/toggle(code=${n.code()})}" method="post">
+                    <input type="hidden" name="active" th:value="${!n.active()}"/>
+                    <button type="submit" th:text="${n.active()} ? 'Deactivate' : 'Activate'"></button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

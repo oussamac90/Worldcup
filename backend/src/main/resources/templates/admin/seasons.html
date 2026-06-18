@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Seasons')}"></head>
+<body>
+<nav th:replace="~{admin/fragments :: nav('seasons')}"></nav>
+<div class="container">
+    <h1>Seasons</h1>
+    <table>
+        <thead><tr><th>Name</th><th>Status</th><th>Starts</th><th>Ends</th><th>Winner</th><th>Actions</th></tr></thead>
+        <tbody>
+        <tr th:each="s : ${seasons}">
+            <td th:text="${s.name}"></td>
+            <td><span class="badge" th:text="${s.status}"></span></td>
+            <td th:text="${s.startsAt}"></td>
+            <td th:text="${s.endsAt}"></td>
+            <td th:text="${s.winningNationId != null ? s.winningNationId : '—'}"></td>
+            <td>
+                <form class="inline" th:if="${s.status.name() == 'SCHEDULED'}"
+                      th:action="@{/admin/seasons/{id}/activate(id=${s.id})}" method="post">
+                    <button type="submit">Activate</button>
+                </form>
+                <form class="inline" th:if="${s.status.name() == 'ACTIVE'}"
+                      th:action="@{/admin/seasons/{id}/close(id=${s.id})}" method="post">
+                    <button type="submit" class="danger">Close</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Create season</h2>
+    <form th:action="@{/admin/seasons}" method="post">
+        <input type="text" name="name" placeholder="Season name" required/>
+        <label class="muted">Starts <input type="datetime-local" name="startsAt" required/></label>
+        <label class="muted">Ends <input type="datetime-local" name="endsAt" required/></label>
+        <button type="submit">Create (scheduled)</button>
+    </form>
+</div>
+</body>
+</html>

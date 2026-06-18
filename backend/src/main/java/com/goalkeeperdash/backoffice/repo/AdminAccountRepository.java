@@ -1,0 +1,14 @@
+package com.goalkeeperdash.backoffice.repo;
+
+import com.goalkeeperdash.backoffice.domain.AdminAccount;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface AdminAccountRepository extends JpaRepository<AdminAccount, UUID> {
+
+    Optional<AdminAccount> findByUsername(String username);
+
+    boolean existsByUsername(String username);
+}

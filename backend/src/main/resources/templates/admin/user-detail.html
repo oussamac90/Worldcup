@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('User')}"></head>
+<body>
+<nav th:replace="~{admin/fragments :: nav('users')}"></nav>
+<div class="container">
+    <p><a th:href="@{/admin/users}">&larr; Users</a></p>
+    <h1 th:text="${user.summary().displayName()}">User</h1>
+    <p class="muted">
+        ID: <span th:text="${user.summary().id()}"></span> ·
+        Nation: <span th:text="${user.summary().nationCode() != null ? user.summary().nationCode() : '—'}"></span> ·
+        Created: <span th:text="${user.createdAt()}"></span> ·
+        Nation locked: <span th:text="${user.nationLocked()}"></span>
+    </p>
+
+    <h2>Status</h2>
+    <p>Current: <span class="badge" th:text="${user.summary().status()}"></span></p>
+    <form class="inline" th:action="@{/admin/users/{id}/status(id=${user.summary().id()})}" method="post">
+        <select name="status">
+            <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                    th:selected="${s == user.summary().status()}"></option>
+        </select>
+        <button type="submit">Update status</button>
+    </form>
+    <form class="inline" th:action="@{/admin/users/{id}/reset-name(id=${user.summary().id()})}" method="post">
+        <button type="submit" class="secondary">Reset display name</button>
+    </form>
+
+    <h2>Identities</h2>
+    <table>
+        <thead><tr><th>Provider</th><th>Subject</th><th>Email</th><th>Linked</th></tr></thead>
+        <tbody>
+        <tr th:each="i : ${user.identities()}">
+            <td th:text="${i.provider()}"></td>
+            <td th:text="${i.subject()}"></td>
+            <td th:text="${i.email() != null ? i.email() : '—'}"></td>
+            <td th:text="${i.createdAt()}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Submissions</h2>
+    <table>
+        <thead><tr><th>When</th><th>Mode</th><th>Score</th><th>Validated</th><th>Flagged</th><th>Counts</th><th></th></tr></thead>
+        <tbody>
+        <tr th:each="s : ${submissions}">
+            <td th:text="${s.createdAt()}"></td>
+            <td th:text="${s.mode()}"></td>
+            <td th:text="${s.score()}"></td>
+            <td th:text="${s.validated()}"></td>
+            <td th:text="${s.flagged()}"></td>
+            <td th:text="${s.countsTowardBoards()}"></td>
+            <td><a th:href="@{/admin/submissions/{id}(id=${s.id()})}">inspect</a></td>
+        </tr>
+        <tr th:if="${submissions.isEmpty()}"><td colspan="7" class="muted">No submissions.</td></tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Flagged submissions')}"></head>
+<body>
+<nav th:replace="~{admin/fragments :: nav('submissions')}"></nav>
+<div class="container">
+    <h1>Flagged submissions</h1>
+    <table>
+        <thead><tr><th>When</th><th>User</th><th>Mode</th><th>Score</th><th>Counts</th><th></th></tr></thead>
+        <tbody>
+        <tr th:each="s : ${submissions.content}">
+            <td th:text="${s.createdAt()}"></td>
+            <td><a th:href="@{/admin/users/{id}(id=${s.userId()})}" th:text="${s.userId()}"></a></td>
+            <td th:text="${s.mode()}"></td>
+            <td th:text="${s.score()}"></td>
+            <td><span class="badge" th:classappend="${s.countsTowardBoards()} ? 'ok' : 'bad'"
+                      th:text="${s.countsTowardBoards()}"></span></td>
+            <td><a th:href="@{/admin/submissions/{id}(id=${s.id()})}">inspect</a></td>
+        </tr>
+        <tr th:if="${submissions.isEmpty()}"><td colspan="6" class="muted">No flagged submissions.</td></tr>
+        </tbody>
+    </table>
+    <p>
+        <a th:if="${page > 0}" th:href="@{/admin/submissions(page=${page-1})}">&larr; Prev</a>
+        <a th:if="${submissions.hasNext()}" th:href="@{/admin/submissions(page=${page+1})}">Next &rarr;</a>
+    </p>
+</div>
+</body>
+</html>

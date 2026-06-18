@@ -1,0 +1,121 @@
+### GoalKeeper Dash — API reference / contract collection
+### Works with the VS Code "REST Client" extension (or JetBrains .http runner).
+### Full run flow: auth -> session -> submit -> leaderboards.
+
+@baseUrl = http://localhost:8080
+@api = {{baseUrl}}/api/v1
+
+### --- Public ---
+
+# List active nations
+GET {{api}}/nations
+
+###
+
+# Global national board (public, defaults to active season)
+GET {{api}}/leaderboards/nations?limit=10
+
+###
+
+# Global personal board (public)
+GET {{api}}/leaderboards/users?limit=10
+
+### --- Auth ---
+
+# Dev login (only when app.oidc.dev-login-enabled=true; NEVER in prod).
+# For real providers use POST {{api}}/auth/google|facebook|apple with a verified IdP idToken.
+# @name login
+POST {{api}}/auth/dev
+Content-Type: application/json
+
+{ "idToken": "demo-player-1" }
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+@refreshToken = {{login.response.body.refreshToken}}
+
+# Refresh access token (rotates the refresh token)
+POST {{api}}/auth/refresh
+Content-Type: application/json
+
+{ "refreshToken": "{{refreshToken}}" }
+
+###
+
+# Logout (revoke refresh token)
+POST {{api}}/auth/logout
+Content-Type: application/json
+
+{ "refreshToken": "{{refreshToken}}" }
+
+### --- Profile & nation ---
+
+# Current profile, nation, lock status, active season
+GET {{api}}/me
+Authorization: Bearer {{accessToken}}
+
+###
+
+# Update display name (rate-limited)
+PATCH {{api}}/me
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "displayName": "TheWall" }
+
+###
+
+# Pick / switch nation (409 NATION_LOCKED after first validated score)
+PUT {{api}}/me/nation
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "nationCode": "MAR" }
+
+### --- Game session + submit ---
+
+# Open a server-issued, single-use session
+# @name session
+POST {{api}}/sessions
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "mode": "TOURNAMENT" }
+
+###
+
+@sessionId = {{session.response.body.sessionId}}
+@nonce = {{session.response.body.nonce}}
+
+# Submit a score (consumes the session)
+POST {{api}}/sessions/{{sessionId}}/submit
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "nonce": "{{nonce}}",
+  "score": 880,
+  "mode": "TOURNAMENT",
+  "durationMs": 142300,
+  "eventSummary": {
+    "shotsFaced": 120, "saves": 88, "goalsConceded": 9,
+    "maxCombo": 14, "perfectSaves": 5, "schemaVersion": 1
+  }
+}
+
+### --- Leaderboards ---
+
+# Headline dual board (personal-within-nation + nation-in-world)
+GET {{api}}/leaderboards/me
+Authorization: Bearer {{accessToken}}
+
+###
+
+# Within-nation board
+GET {{api}}/leaderboards/nations/MAR/users?limit=20
+
+###
+
+# A closed season's final board (pass seasonId)
+GET {{api}}/leaderboards/nations?seasonId=REPLACE_WITH_SEASON_ID&limit=20

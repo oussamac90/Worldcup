@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Users')}"></head>
+<body>
+<nav th:replace="~{admin/fragments :: nav('users')}"></nav>
+<div class="container">
+    <h1>Users</h1>
+    <form th:action="@{/admin/users}" method="get" style="margin-bottom:16px;">
+        <input type="text" name="q" th:value="${q}" placeholder="Search display name"/>
+        <button type="submit">Search</button>
+    </form>
+    <table>
+        <thead><tr><th>Display name</th><th>Nation</th><th>Status</th><th>Type</th><th></th></tr></thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.displayName()}"></td>
+            <td th:text="${u.nationCode() != null ? u.nationCode() : '—'}"></td>
+            <td><span class="badge" th:text="${u.status()}"></span></td>
+            <td><span class="muted" th:text="${u.synthetic()} ? 'synthetic' : 'real'"></span></td>
+            <td><a th:href="@{/admin/users/{id}(id=${u.id()})}">view</a></td>
+        </tr>
+        <tr th:if="${users.isEmpty()}"><td colspan="5" class="muted">No users found.</td></tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
